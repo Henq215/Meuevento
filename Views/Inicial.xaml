@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Meuevento.Views.Inicial"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#F4F7FC">
+
+    <Grid RowDefinitions="Auto, *, Auto">
+        <!-- Header com Gradiente Suave -->
+        <BoxView Grid.Row="0" HeightRequest="160" Margin="0,0,0,-100">
+            <BoxView.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#4A3AFF" Offset="0.1" />
+                    <GradientStop Color="#6E56FF" Offset="1.0" />
+                </LinearGradientBrush>
+            </BoxView.Background>
+        </BoxView>
+
+        <VerticalStackLayout Grid.Row="0" Padding="24,40,24,0" Spacing="4">
+            <Label Text="Meu Evento" FontSize="12" TextColor="#D1D1D1" FontAttributes="Bold" CharacterSpacing="2"/>
+            <Label Text="Novo Evento" FontSize="34" FontAttributes="Bold" TextColor="White" />
+        </VerticalStackLayout>
+
+        <ScrollView Grid.Row="1" Margin="0,20,0,0">
+            <VerticalStackLayout Padding="20" Spacing="20">
+
+                <!-- Card Principal -->
+                <Border StrokeShape="RoundRectangle 20" StrokeThickness="0" BackgroundColor="White" Padding="20">
+                    <Border.Shadow>
+                        <Shadow Brush="#000000" Offset="0,10" Radius="20" Opacity="0.08"/>
+                    </Border.Shadow>
+
+                    <VerticalStackLayout Spacing="18">
+                        <!-- Nome do Evento -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="NOME DO EVENTO" FontSize="11" FontAttributes="Bold" TextColor="#9BA3AF"/>
+                            <Entry x:Name="txt_nome_evento" Placeholder="Ex: Aniversário do João" PlaceholderColor="#C4C4C4"
+                                   TextColor="#2B2D42" FontSize="16" TextChanged="OnComponentes_Changed"/>
+                            <BoxView HeightRequest="1" Color="#F0F0F0"/>
+                        </VerticalStackLayout>
+
+                        <!-- Localização -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="LOCALIZAÇÃO" FontSize="11" FontAttributes="Bold" TextColor="#9BA3AF"/>
+                            <Grid ColumnDefinitions="*, 40" VerticalOptions="Center">
+                                <Entry Grid.Column="0" x:Name="txt_endereco" Placeholder="Onde será?" TextColor="#2B2D42" FontSize="16" TextChanged="OnComponentes_Changed"/>
+
+                                
+                                <Label Grid.Column="1" Text="📍" FontSize="22" 
+                                       HorizontalOptions="Center" VerticalOptions="Center"
+                                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding SelecionarLocalCommand}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </Grid>
+                            <BoxView HeightRequest="1" Color="#F0F0F0"/>
+                        </VerticalStackLayout>
+
+                        <!-- Participantes -->
+                        <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="PARTICIPANTES" FontSize="11" FontAttributes="Bold" TextColor="#9BA3AF"/>
+                                <Label Text="{Binding Value, StringFormat='{0} Pessoas', Source={x:Reference stp_adultos}}" 
+                                       FontSize="16" TextColor="#2B2D42" FontAttributes="Bold"/>
+                            </VerticalStackLayout>
+                            <Stepper Grid.Column="1" x:Name="stp_adultos" Minimum="0" Maximum="100" ValueChanged="OnComponentes_Changed" BackgroundColor="#F4F7FC"/>
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Color="#F0F0F0"/>
+
+                        <!-- Custo por Participante -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="CUSTO POR PARTICIPANTE" FontSize="11" FontAttributes="Bold" TextColor="#9BA3AF"/>
+                            <Grid ColumnDefinitions="Auto, *">
+                                <Label Grid.Column="0" Text="R$" FontSize="16" TextColor="#2B2D42" FontAttributes="Bold" VerticalOptions="Center" Margin="0,0,5,0"/>
+                                <Entry Grid.Column="1" x:Name="txt_custo_participante" Placeholder="0,00" PlaceholderColor="#C4C4C4"
+                                       TextColor="#2B2D42" FontSize="16" Keyboard="Numeric" TextChanged="OnComponentes_Changed"/>
+                            </Grid>
+                            <BoxView HeightRequest="1" Color="#F0F0F0"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Card de Datas -->
+                <Border StrokeShape="RoundRectangle 20" StrokeThickness="0" BackgroundColor="White" Padding="20">
+                    <Grid ColumnDefinitions="*, 1, *" ColumnSpacing="15">
+                        <VerticalStackLayout Grid.Column="0" Spacing="5">
+                            <Label Text="INÍCIO" FontSize="11" FontAttributes="Bold" TextColor="#9BA3AF" HorizontalTextAlignment="Center"/>
+                            <DatePicker x:Name="dtpck_checkin" Format="dd MMM" TextColor="#4A3AFF" FontAttributes="Bold" DateSelected="dtpck_checkin_DateSelected"/>
+                        </VerticalStackLayout>
+
+                        <BoxView Grid.Column="1" WidthRequest="1" Color="#F0F0F0" VerticalOptions="Fill"/>
+
+                        <VerticalStackLayout Grid.Column="2" Spacing="5">
+                            <Label Text="TÉRMINO" FontSize="11" FontAttributes="Bold" TextColor="#9BA3AF" HorizontalTextAlignment="Center"/>
+                            <DatePicker x:Name="dtpck_checkout" Format="dd MMM" TextColor="#4A3AFF" FontAttributes="Bold" DateSelected="OnComponentes_Changed"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Botão Inferior -->
+        <VerticalStackLayout Grid.Row="2" Padding="20,10,20,30" BackgroundColor="White">
+            <Button x:Name="btn_avancar" Text="CRIAR EVENTO" HeightRequest="60" CornerRadius="30"
+                    FontAttributes="Bold" FontSize="16" TextColor="White" IsEnabled="False" Opacity="0.5"
+                    Clicked="Button_Clicked">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#4A3AFF" Offset="0.1" />
+                        <GradientStop Color="#8E82FF" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Button.Background>
+                <Button.Shadow>
+                    <Shadow Brush="#4A3AFF" Offset="0,8" Radius="15" Opacity="0.3"/>
+                </Button.Shadow>
+            </Button>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>
